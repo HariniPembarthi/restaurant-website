@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Orders</title>
+</head>
+<body>
+
+<h1>Orders</h1>
+<button onclick="loadOrders()">Load Orders</button>
+<div id="orders"></div>
+
+<script>
+function loadOrders() {
+  fetch("http://localhost:3000/orders")
+  .then(res => res.json())
+  .then(data => {
+    let html = "";
+
+    data.forEach((order, i) => {
+      html += `<h3>Order ${i+1}</h3>
+               <pre>${JSON.stringify(order, null, 2)}</pre>`;
+    });
+
+    document.getElementById("orders").innerHTML = html;
+  });
+}
+</script>
+
+</body>
+</html>

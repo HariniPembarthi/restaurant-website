@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Golden Platter</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream: #F9F4EC;
+      --warm-white: #FDFAF5;
+      --ink: #1A1610;
+      --brown: #6B4C2A;
+      --gold: #C9943A;
+      --gold-light: #E8C97A;
+      --muted: #8A7660;
+      --border: rgba(107, 76, 42, 0.18);
+      --font-display: 'Cormorant Garamond', Georgia, serif;
+      --font-body: 'Jost', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+    body { background: var(--cream); color: var(--ink); font-family: var(--font-body); font-weight: 300; overflow-x: hidden; }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.4rem 3rem;
+      background: rgba(249, 244, 236, 0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      animation: fadeDown 0.8s ease forwards;
+    }
+    @keyframes fadeDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+
+    .nav-logo { font-family: var(--font-display); font-size: 1.7rem; font-weight: 600; letter-spacing: 0.04em; color: var(--ink); text-decoration: none; }
+    .nav-logo span { color: var(--gold); font-style: italic; }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+    .nav-links a { font-family: var(--font-body); font-size: 0.78rem; font-weight: 400; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color 0.3s; position: relative; }
+    .nav-links a::after { content: ''; position: absolute; bottom: -4px; left: 0; right: 0; height: 1px; background: var(--gold); transform: scaleX(0); transition: transform 0.3s; }
+    .nav-links a:hover { color: var(--ink); }
+    .nav-links a:hover::after { transform: scaleX(1); }
+    .nav-reserve { font-family: var(--font-body); font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold); text-decoration: none; border: 1px solid var(--gold); padding: 0.55rem 1.4rem; transition: all 0.3s; }
+    .nav-reserve:hover { background: var(--gold); color: var(--warm-white); }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      text-align: center; padding: 8rem 2rem 4rem; position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse 60% 50% at 20% 80%, rgba(201,148,58,0.08) 0%, transparent 60%), radial-gradient(ellipse 50% 40% at 80% 20%, rgba(201,148,58,0.06) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .hero-ornament { font-family: var(--font-display); font-size: 0.8rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); margin-bottom: 1.8rem; display: flex; align-items: center; gap: 1rem; opacity: 0; animation: fadeUp 1s 0.3s ease forwards; }
+    .hero-ornament::before, .hero-ornament::after { content: ''; display: block; width: 40px; height: 1px; background: var(--gold-light); }
+    .hero h1 { font-family: var(--font-display); font-size: clamp(3.5rem, 9vw, 7.5rem); font-weight: 300; line-height: 1.05; color: var(--ink); margin-bottom: 1.5rem; opacity: 0; animation: fadeUp 1s 0.5s ease forwards; }
+    .hero h1 em { font-style: italic; color: var(--brown); }
+    .hero-sub { font-size: 1rem; font-weight: 300; color: var(--muted); letter-spacing: 0.04em; line-height: 1.8; max-width: 420px; margin-bottom: 3rem; opacity: 0; animation: fadeUp 1s 0.7s ease forwards; }
+    .hero-cta { display: flex; gap: 1.2rem; flex-wrap: wrap; justify-content: center; opacity: 0; animation: fadeUp 1s 0.9s ease forwards; }
+    .btn-gold { background: var(--gold); color: var(--warm-white); border: none; padding: 1rem 2.4rem; font-family: var(--font-body); font-size: 0.78rem; letter-spacing: 0.14em; text-transform: uppercase; cursor: pointer; text-decoration: none; transition: background 0.3s, transform 0.2s; display: inline-block; }
+    .btn-gold:hover { background: var(--brown); transform: translateY(-2px); }
+    .btn-outline { background: transparent; color: var(--ink); border: 1px solid var(--border); padding: 1rem 2.4rem; font-family: var(--font-body); font-size: 0.78rem; letter-spacing: 0.14em; text-transform: uppercase; cursor: pointer; text-decoration: none; transition: border-color 0.3s, color 0.3s; display: inline-block; }
+    .btn-outline:hover { border-color: var(--gold); color: var(--gold); }
+    .scroll-hint { position: absolute; bottom: 2.5rem; font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); display: flex; flex-direction: column; align-items: center; gap: 8px; opacity: 0; animation: fadeUp 1s 1.2s ease forwards; }
+    .scroll-line { width: 1px; height: 40px; background: var(--gold-light); animation: growLine 2s 1.5s ease infinite; }
+    @keyframes growLine { 0%,100%{transform:scaleY(0.3);opacity:0.4} 50%{transform:scaleY(1);opacity:1} }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* ── INTRO STRIP ── */
+    .intro-strip { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .intro-item { padding: 2.8rem 2rem; text-align: center; border-right: 1px solid var(--border); transition: background 0.3s; }
+    .intro-item:last-child { border-right: none; }
+    .intro-item:hover { background: rgba(201,148,58,0.04); }
+    .intro-icon { font-size: 1.6rem; margin-bottom: 0.8rem; }
+    .intro-label { font-family: var(--font-display); font-size: 1.2rem; font-weight: 600; color: var(--ink); margin-bottom: 0.4rem; }
+    .intro-desc { font-size: 0.82rem; color: var(--muted); letter-spacing: 0.02em; line-height: 1.6; }
+
+    /* ── MENU TABS ── */
+    .menu-section { padding: 6rem 3rem; max-width: 1200px; margin: 0 auto; }
+    .section-header { text-align: center; margin-bottom: 2.5rem; }
+    .section-eyebrow { font-size: 0.75rem; letter-spacing: 0.28em; text-transform: uppercase; color: var(--gold); margin-bottom: 1rem; display: block; }
+    .section-title { font-family: var(--font-display); font-size: clamp(2rem, 4vw, 3.2rem); font-weight: 300; line-height: 1.2; color: var(--ink); }
+    .section-title em { font-style: italic; color: var(--brown); }
+
+    .menu-tabs { display: flex; gap: 0.6rem; justify-content: center; flex-wrap: wrap; margin-bottom: 3rem; }
+    .tab-btn { font-family: var(--font-body); font-size: 0.72rem; font-weight: 400; letter-spacing: 0.14em; text-transform: uppercase; padding: 0.55rem 1.4rem; border: 1px solid var(--border); background: transparent; color: var(--muted); cursor: pointer; transition: all 0.3s; }
+    .tab-btn:hover, .tab-btn.active { background: var(--gold); color: var(--warm-white); border-color: var(--gold); }
+
+    .menu-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5px; background: var(--border); border: 1px solid var(--border); }
+    .menu-card { background: var(--warm-white); padding: 2.2rem 2rem; display: flex; flex-direction: column; transition: background 0.3s; position: relative; overflow: hidden; }
+    .menu-card::before { content: ''; position: absolute; top: 0; left: 0; width: 3px; height: 0; background: var(--gold); transition: height 0.4s ease; }
+    .menu-card:hover { background: #FDFBF7; }
+    .menu-card:hover::before { height: 100%; }
+    .menu-card.hidden { display: none; }
+
+    .menu-card-tag { font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 1rem; }
+    .menu-card-emoji { font-size: 2rem; margin-bottom: 0.7rem; display: block; }
+    .menu-card-name { font-family: var(--font-display); font-size: 1.45rem; font-weight: 400; color: var(--ink); margin-bottom: 0.6rem; line-height: 1.3; }
+    .menu-card-desc { font-size: 0.82rem; color: var(--muted); line-height: 1.7; flex: 1; }
+    .menu-card-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 1.5rem; padding-top: 1.2rem; border-top: 1px solid var(--border); }
+    .menu-price { font-family: var(--font-display); font-size: 1.3rem; font-weight: 600; color: var(--gold); }
+    .menu-badge { font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; background: rgba(201,148,58,0.12); color: var(--gold); padding: 3px 10px; }
+
+    /* ── TESTIMONIAL ── */
+    .testimonial-section { background: var(--ink); padding: 6rem 3rem; text-align: center; position: relative; overflow: hidden; }
+    .testimonial-section::before { content: '\201C'; position: absolute; top: -2rem; left: 50%; transform: translateX(-50%); font-family: var(--font-display); font-size: 20rem; line-height: 1; color: rgba(201,148,58,0.06); pointer-events: none; }
+    .testi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 2rem; max-width: 1000px; margin: 0 auto; }
+    .testi-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(201,148,58,0.15); padding: 2rem; text-align: left; }
+    .testi-stars { color: var(--gold-light); font-size: 0.9rem; margin-bottom: 1rem; }
+    .testi-quote { font-family: var(--font-display); font-size: 1.05rem; font-weight: 300; font-style: italic; color: var(--cream); line-height: 1.6; margin-bottom: 1.2rem; }
+    .testi-author { font-size: 0.75rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); }
+    .testi-heading { font-family: var(--font-display); font-size: clamp(1.6rem, 3vw, 2.4rem); font-weight: 300; font-style: italic; color: var(--cream); margin-bottom: 3rem; }
+
+    /* ── INFO ── */
+    .info-section { padding: 5rem 3rem; display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; max-width: 900px; margin: 0 auto; align-items: start; }
+    .info-block-title { font-family: var(--font-display); font-size: 1.8rem; font-weight: 300; margin-bottom: 1.5rem; color: var(--ink); }
+    .hours-row { display: flex; justify-content: space-between; padding: 0.7rem 0; border-bottom: 1px solid var(--border); font-size: 0.85rem; color: var(--muted); }
+    .hours-row span:last-child { color: var(--ink); font-weight: 400; }
+    .info-address { font-size: 0.9rem; color: var(--muted); line-height: 2; }
+    .info-address a { color: var(--gold); text-decoration: none; }
+
+    /* ── FOOTER ── */
+    footer { background: var(--ink); padding: 3rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; border-top: 1px solid rgba(201,148,58,0.3); }
+    .footer-logo { font-family: var(--font-display); font-size: 1.5rem; font-weight: 600; color: var(--cream); }
+    .footer-logo span { color: var(--gold); font-style: italic; }
+    .footer-nav { display: flex; gap: 2rem; list-style: none; }
+    .footer-nav a { font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(249,244,236,0.5); text-decoration: none; transition: color 0.3s; }
+    .footer-nav a:hover { color: var(--gold); }
+    .footer-copy { font-size: 0.75rem; color: rgba(249,244,236,0.3); }
+
+    @media (max-width: 768px) {
+      nav { padding: 1.2rem 1.5rem; }
+      .nav-reserve { display: none; }
+      .intro-strip { grid-template-columns: 1fr; }
+      .intro-item { border-right: none; border-bottom: 1px solid var(--border); }
+      .menu-section { padding: 4rem 1.5rem; }
+      .info-section { grid-template-columns: 1fr; padding: 3rem 1.5rem; gap: 2.5rem; }
+      footer { flex-direction: column; text-align: center; padding: 2rem 1.5rem; }
+    }
+    .contact-form input,
+.contact-form textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid var(--border);
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  background: var(--warm-white);
+}
+
+.contact-form textarea {
+  resize: none;
+}
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">Golden <span>Platter</span></a>
+  <ul class="nav-links">
+    <li><a href="#">Home</a></li>
+    <li><a href="#menu">Menu</a></li>
+    <li><a href="#info">Contact</a></li>
+  </ul>
+  <a href="cart.html" class="nav-reserve">View Cart</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-ornament">Fine Dining · Hyderabad</div>
+  <h1>Where every plate<br><em>tells a story</em></h1>
+  <p class="hero-sub">Fresh ingredients, bold flavors, and warm hospitality — crafted with love at Golden Platter every single day.</p>
+  <div class="hero-cta">
+    <a href="#menu" class="btn-gold">Explore the menu</a>
+    <a href="#info" class="btn-outline">Find us</a>
+  </div>
+  <div class="scroll-hint">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- INTRO STRIP -->
+<div class="intro-strip">
+  <div class="intro-item">
+    <div class="intro-icon">🌿</div>
+    <div class="intro-label">Farm Fresh</div>
+    <div class="intro-desc">Locally sourced, seasonal ingredients picked at peak freshness</div>
+  </div>
+  <div class="intro-item">
+    <div class="intro-icon">👨‍🍳</div>
+    <div class="intro-label">Expert Chefs</div>
+    <div class="intro-desc">Decades of culinary mastery on every plate we serve</div>
+  </div>
+  <div class="intro-item">
+    <div class="intro-icon">✦</div>
+    <div class="intro-label">Unforgettable</div>
+    <div class="intro-desc">An experience that lingers long after the last bite</div>
+  </div>
+</div>
+
+<!-- MENU -->
+<section class="menu-section" id="menu">
+  <div class="section-header">
+    <span class="section-eyebrow">Our offerings</span>
+    <h2 class="section-title">The Golden Platter <em>Menu</em></h2>
+  </div>
+
+  <div class="menu-tabs">
+    <button class="tab-btn active" data-tab="all">All</button>
+    <button class="tab-btn" data-tab="starters">Starters</button>
+    <button class="tab-btn" data-tab="mains">Mains</button>
+    <button class="tab-btn" data-tab="biryani">Biryani &amp; Rice</button>
+    <button class="tab-btn" data-tab="desserts">Desserts</button>
+    <button class="tab-btn" data-tab="icecream">Ice Creams</button>
+    <button class="tab-btn" data-tab="drinks">Cool Drinks</button>
+  </div>
+
+  <div class="menu-grid">
+
+    <!-- STARTERS -->
+    <div class="menu-card" data-cat="starters">
+      <span class="menu-card-emoji">🥗</span>
+      <div class="menu-card-tag">Starter</div>
+      <div class="menu-card-name">Garden Harvest Salad</div>
+      <div class="menu-card-desc">Crisp seasonal greens, heirloom cherry tomatoes, cucumber ribbons, toasted seeds with our house-made citrus dressing.</div>
+      <div class="menu-card-footer"><span class="menu-price">₹220</span><span class="menu-badge">Vegan</span>
+      <button class="add-cart" data-name="Garden Harvest Salad" data-price="220">
+  Add to Cart
+</button>
+      </div>
+    </div>
+    <div class="menu-card" data-cat="starters">
+      <span class="menu-card-emoji">🥘</span>
+      <div class="menu-card-tag">Starter</div>
+      <div class="menu-card-name">Crispy Paneer Tikka</div>
+      <div class="menu-card-desc">Marinated cottage cheese cubes grilled in a tandoor, served with mint chutney and pickled onions.</div>
+      <div class="menu-card-footer"><span class="menu-price">₹280</span><span class="menu-badge">Veg</span>
+      <button class="add-cart" data-name="Crispy Paneer Tikka" data-price="280">
+  Add to Cart
+</button>
+      </div>
+    </div>
+    <div class="menu-card" data-cat="starters">
+      <span class="menu-card-emoji">🍲</span>
+      <div class="menu-card-tag">Starter</div>
+      <div class="menu-card-name">Spiced Lentil Soup</div>
+      <div class="menu-card-desc">Slow-simmered lentils, cumin, coriander, coconut cream, served warm with toasted bread.</div>
+      <div class="menu-card-footer"><span class="menu-price">₹180</span><span class="menu-badge">Healthy</span>
+      <button class="add-cart" data-name="Spiced Lentil Soup" data-price="180">
+  Add to Cart
+</button>
+      </div>
+    </div>
+    <div class="menu-card" data-cat="starters">
+      <span class="menu-card-emoji">🧆</span>
+      <div class="menu-card-tag">Starter</div>
+      <div class="menu-card-name">Golden Platter Nachos</div>
+      <div class="menu-card-desc">Crispy corn chips loaded with jalapeños, cheddar, sour cream, guacamole, and fresh salsa.</div>
+      <div class="menu-card-footer"><span class="menu-price">₹240</span><span class="menu-badge">Bestseller</span>
+      <button class="add-cart" data-name="Golden Platter Nachos" data-price="240">
+  Add to Cart
+</button>
+      </div>
+    </div>
+
+    <!-- MAINS -->
+    <div class="menu-card" data-cat="mains">
+      <span class="menu-card-emoji">🍝</span>
+      <div class="menu-card-tag">Main Course</div>
+      <div class="menu-card-name">Signature Slow Pasta</div>
+      <div class="menu-card-desc">Hand-rolled pappardelle in a six-hour braised sauce, fresh basil, aged parmesan, and a drizzle of truffle oil.</div>
+      <div class="menu-card-footer"><span class="menu-price">₹480</span><span class="menu-badge">Chef's Pick</span>
+      <button class="add-cart" data-name="Signature Slow Paste" data-price="480">
+  Add to Cart
+</button>
+      </div>
+    </div>
+    <div class="menu-card" data-cat="mains">
+      <span class="menu-card-emoji">🍛</span>
+      <div class="menu-card-tag">Main Course</div>
+      <div class="menu-card-name">Butter Chicken Masala</div>
+      <div class="menu-card-desc">Tender chicken in a rich, velvety tomato-butter gravy, served with warm butter naan and basmati rice.</div>
+      <div class="menu-card-footer"><span class="menu-price">₹420</span><span class="menu-badge">Classic</span>
+      <button class="add-cart" data-name="Butter Chicken Masala" data-price="420">
+  Add to Cart
+</button>
+      </div>
+    </div>
+    <div class="menu-card" data-cat="mains">
+      <span class="menu-card-emoji">🥩</span>
+      <div class="menu-card-tag">Main Course</div>
+      <div class="menu-card-name">Grilled Lamb Chops</div>
+      <div class="menu-card-desc">Herb-crusted lamb chops, rosemary jus, roasted garlic mash, and charred broccolini on the side.</div>
+      <div class="menu-card-footer"><span class="menu-price">₹680</span><span class="menu-badge">Premium</span>
+      <button class="add-cart" data-name="Grilled Lamb Chops" data-price="680">
+  Add to Cart
+</button>
+      </div>
+    </div>
+    <div class="menu-card" data-cat="mains">
+      <span class="menu-card-emoji">🫕</span>
+      <div class="menu-card-tag">Main Course</div>
+      <div class="menu-card-name">Palak Paneer Royale</div>
+      <div class="menu-card-desc">Creamy spinach gravy with soft paneer cubes, fenugreek, and a touch of cream — served with garlic naan.</div>
+      <div class="menu-card-footer"><span class="menu-price">₹340</span><span class="menu-badge">Veg</span>
+      <button class="add-cart" data-name="Palak Paneer Royale" data-price="340">
+  Add to Cart
+</button>
+      </div>
+    </div>
+    <div class="menu-card" data-cat="mains">
+  <span class="menu-card-emoji">🍲</span>
+  <div class="menu-card-tag">Main Course</div>
+  <div class="menu-card-name">Veg Fried Rice</div>
+  <div class="menu-card-desc">Stir-fried rice with fresh vegetables, soy sauce, and aromatic spices.</div>
+  <div class="menu-card-footer">
+    <span class="menu-price">₹250</span>
+    <span class="menu-badge">Veg</span>
+    <button class="add-cart" data-name="Veg Fried Rice" data-price="250">
+  Add to Cart
+</button>
+  </div>
+</div>
+
+<div class="menu-card" data-cat="mains">
+  <span class="menu-card-emoji">🍗</span>
+  <div class="menu-card-tag">Main Course</div>
+  <div class="menu-card-name">Chicken Biryani</div>
+  <div class="menu-card-desc">Fragrant basmati rice cooked with spicy chicken and traditional spices.</div>
+  <div class="menu-card-footer">
+    <span class="menu-price">₹390</span>
+    <span class="menu-badge">Bestseller</span>
+    <button class="add-cart" data-name="Chicken Biryani" data-price="390">
+  Add to Cart
+</button>
+  </div>
+</div>
+
+    <!-- BIRYANI & RICE -->
+    <div class="menu-card" data-cat="biryani">
+      <span class="menu-card-emoji">🍚</span>
+      <div class="menu-card-tag">Biryani &amp; Rice</div>
+      <div class="menu-card-name">Hyderabadi Dum Biryani</div>
+      <div class="menu-card-desc">Slow-cooked basmati rice with tender mutton, saffron, caramelised onions, and fragrant whole spices — sealed in dum.</div>
+      <div class="menu-card-footer"><span class="menu-price">₹520</span><span class="menu-badge">Signature</span>
+      <button class="add-cart" data-name="Hyderabadi Dum Biryani" data-price="520">
+  Add to Cart
+</button>
+      </div>
+    </div>
+    <div class="menu-card" data-cat="biryani">
+      <span class="menu-card-emoji">🌾</span>
+      <div class="menu-card-tag">Biryani &amp; Rice</div>
+      <div class="menu-card-name">Vegetable Dum Biryani</div>
+      <div class="menu-card-desc">Seasonal vegetables and paneer layered with saffron rice, fried onions, and fresh mint — a vegetarian celebration.</div>
+      <div class="menu-card-footer"><span class="menu-price">₹380</span><span class="menu-badge">Veg</span>
+      <button class="add-cart" data-name="Vegetable Dum Biryani" data-price="380">
+  Add to Cart
+</button>
+      </div>
+    </div>
+    <div class="menu-card" data-cat="biryani">
+      <span class="menu-card-emoji">🍗</span>
+      <div class="menu-card-tag">Biryani &amp; Rice</div>
+      <div class="menu-card-name">Chicken Tikka Biryani</div>
+      <div class="menu-card-desc">Grilled tikka chicken pieces layered with fragrant rice, saffron milk, and caramelised onions in a clay pot.</div>
+      <div class="menu-card-footer"><span class="menu-price">₹460</span><span class="menu-badge">Bestseller</span>
+      <button class="add-cart" data-name="Chicken Tikka Biryani" data-price="460">
+  Add to Cart
+</button>
+      </div>
+    </div>
+
+    <!-- DESSERTS -->
+    <div class="menu-card" data-cat="desserts">
+      <span class="menu-card-emoji">🍮</span>
+      <div class="menu-card-tag">Dessert</div>
+      <div class="menu-card-name">Warm Chocolate Fondant</div>
+      <div class="menu-card-desc">Molten dark chocolate centre, vanilla bean ice cream, salted caramel, garnished with edible gold leaf.
+        </div>
+      <div class="menu-card-footer"><span class="menu-price">₹320</span><span class="menu-badge">Must Try</span>
+      <button class="add-cart" data-name="Warm Chocolate Foudant" data-price="320">
+  Add to Cart
+</button>
+      </div>
+    </div>
+    <div class="menu-card" data-cat="desserts">
+      <span class="menu-card-emoji">🍯</span>
+      <div class="menu-card-tag">Dessert</div>
+      <div class="menu-card-name">Gulab Jamun Cheesecake</div>
+      <div class="menu-card-desc">Creamy baked cheesecake with a spiced gulab jamun centre, rose syrup glaze, and pistachio crumble.</div>
+      <div class="menu-card-footer"><span class="menu-price">₹280</span><span class="menu-badge">Fusion</span>
+      <button class="add-cart" data-name="Gulab Jamun Cheesecake" data-price="280">
+  Add to Cart
+</button>
+      </div>
+    </div>
+    <div class="menu-card" data-cat="desserts">
+      <span class="menu-card-emoji">🍰</span>
+      <div class="menu-card-tag">Dessert</div>
+      <div class="menu-card-name">Mango Phirni</div>
+      <div class="menu-card-desc">Chilled rice pudding with fresh Alphonso mango pulp, cardamom, saffron, and scattered rose petals.</div>
+      <div class="menu-card-footer"><span class="menu-price">₹200</span><span class="menu-badge">Seasonal</span>
+      <button class="add-cart" data-name="Mango Phirni" data-price="200">
+  Add to Cart
+</button>
+      </div>
+    </div>
+    <div class="menu-card" data-cat="desserts">
+      <span class="menu-card-emoji">🧁</span>
+      <div class="menu-card-tag">Dessert</div>
+      <div class="menu-card-name">Tiramisu à la Platter</div>
+      <div class="menu-card-desc">Italian-style espresso-soaked ladyfingers, mascarpone cream, dusted with finest dark cocoa powder.</div>
+      <div class="menu-card-footer"><span class="menu-price">₹300</span><span class="menu-badge">Classic</span>
+      <button class="add-cart" data-name="Tiramisu à la Platter" data-price="300">
+  Add to Cart
+</button>
+      </div>
+    </div>
+
+    <!-- ICE CREAMS -->
+    <div class="menu-card" data-cat="icecream">
+      <span class="menu-card-emoji">🍦</span>
+      <div class="menu-card-tag">Ice Cream</div>
+      <div class="menu-card-name">Belgian Dark Chocolate</div>
+      <div class="menu-card-desc">Rich 70% dark Belgian chocolate ice cream, hot fudge drizzle, crushed praline, and a wafer roll.</div>
+      <div class="menu-card-footer"><span class="menu-price">₹180</span><span class="menu-badge">Indulgent</span>
+      <button class="add-cart" data-name="Belgian Dark chocolate" data-price="180">
+  Add to Cart
+</button>
+      </div>
+    </div>
+    <div class="menu-card" data-cat="icecream">
+      <span class="menu-card-emoji">🍨</span>
+      <div class="menu-card-tag">Ice Cream</div>
+      <div class="menu-card-name">Mango Kulfi Sundae</div>
+      <div class="menu-card-desc">Creamy mango kulfi, rose syrup, roasted pistachios, saffron strands — a desi delight in a bowl.</div>
+      <div class="menu-card-footer"><span class="menu-price">₹220</span><span class="menu-badge">Desi Fave</span>
+      <button class="add-cart" data-name="Mango Kulfi Sundae" data-price="220">
+  Add to Cart
+</button>
+      </div>
+    </div>
+    <div class="menu-card" data-cat="icecream">
+      <span class="menu-card-emoji">🍧</span>
+      <div class="menu-card-tag">Ice Cream</div>
+      <div class="menu-card-name">Strawberry Rose Gelato</div>
+      <div class="menu-card-desc">Fresh strawberry gelato with rose water swirl, basil seeds, and candied rose petals on top.</div>
+      <div class="menu-card-footer"><span class="menu-price">₹200</span><span class="menu-badge">Floral</span>
+      <button class="add-cart" data-name="Straberry Rose Gelato" data-price="200">
+  Add to Cart
+</button>
+      </div>
+    </div>
+    <div class="menu-card" data-cat="icecream">
+      <span class="menu-card-emoji">🥧</span>
+      <div class="menu-card-tag">Ice Cream</div>
+      <div class="menu-card-name">Saffron Pistachio Trio</div>
+      <div class="menu-card-desc">Three scoops of kesar, pista, and malai ice cream, drizzled with warm honey and silver leaf garnish.</div>
+      <div class="menu-card-footer"><span class="menu-price">₹260</span><span class="menu-badge">Premium</span>
+      <button class="add-cart" data-name="Saffron Pistachio Trio" data-price="260">
+  Add to Cart
+</button>
+      </div>
+    </div>
+
+    <!-- DRINKS -->
+    <div class="menu-card" data-cat="drinks">
+      <span class="menu-card-emoji">🍋</span>
+      <div class="menu-card-tag">Cool Drinks</div>
+      <div class="menu-card-name">House Pressed Lemonade</div>
+      <div class="menu-card-desc">Cold-pressed lemons, fresh mint, Himalayan pink salt, and a hint of rose water — served over crushed ice.</div>
+      <div class="menu-card-footer"><span class="menu-price">₹120</span><span class="menu-badge">Refreshing</span>
+      <button class="add-cart" data-name="House Pressed Lemonade" data-price="120">
+  Add to Cart
+</button>
+      </div>
+    </div>
+    <div class="menu-card" data-cat="drinks">
+      <span class="menu-card-emoji">🥭</span>
+      <div class="menu-card-tag">Cool Drinks</div>
+      <div class="menu-card-name">Tropical Mango Lassi</div>
+      <div class="menu-card-desc">Thick Alphonso mango, hung curd, cardamom, and a pinch of saffron — creamy and irresistibly refreshing.</div>
+      <div class="menu-card-footer"><span class="menu-price">₹150</span><span class="menu-badge">Bestseller</span>
+      <button class="add-cart" data-name="Tropical mango Lassi" data-price="150">
+  Add to Cart
+</button>
+      </div>
+    </div>
+    <div class="menu-card" data-cat="drinks">
+      <span class="menu-card-emoji">🍹</span>
+      <div class="menu-card-tag">Cool Drinks</div>
+      <div class="menu-card-name">Watermelon Mint Cooler</div>
+      <div class="menu-card-desc">Freshly blended watermelon, muddled mint, a squeeze of lime, and sparkling water — summer in a glass.</div>
+      <div class="menu-card-footer"><span class="menu-price">₹130</span><span class="menu-badge">Summer Special</span>
+      <button class="add-cart" data-name="Watermelon Mint Cooler" data-price="130">
+  Add to Cart
+</button>
+      </div>
+    </div>
+    <div class="menu-card" data-cat="drinks">
+      <span class="menu-card-emoji">🧋</span>
+      <div class="menu-card-tag">Cool Drinks</div>
+      <div class="menu-card-name">Brown Sugar Bubble Tea</div>
+      <div class="menu-card-desc">Chilled milk tea with caramel brown sugar syrup, tiger stripes, and chewy tapioca pearls at the bottom.</div>
+      <div class="menu-card-footer"><span class="menu-price">₹180</span><span class="menu-badge">Trendy</span>
+      <button class="add-cart" data-name="Brown Sugar Bubble Tea" data-price="180">
+  Add to Cart
+</button>
+      </div>
+    </div>
+    <div class="menu-card" data-cat="drinks">
+      <span class="menu-card-emoji">☕</span>
+      <div class="menu-card-tag">Cool Drinks</div>
+      <div class="menu-card-name">Cold Brew Iced Coffee</div>
+      <div class="menu-card-desc">18-hour cold-brewed single-origin coffee over ice, a splash of oat milk, and a hint of vanilla syrup.</div>
+      <div class="menu-card-footer"><span class="menu-price">₹160</span><span class="menu-badge">Coffee Lover</span>
+      <button class="add-cart" data-name="Cold Brew Iced Coffee" data-price="160">
+  Add to Cart
+</button>
+      </div>
+    </div>
+    <div class="menu-card" data-cat="drinks">
+      <span class="menu-card-emoji">🍵</span>
+      <div class="menu-card-tag">Cool Drinks</div>
+      <div class="menu-card-name">Iced Masala Chai Latte</div>
+      <div class="menu-card-desc">Spiced chai concentrate with cinnamon, ginger, and cardamom, poured over ice with frothy chilled milk.</div>
+      <div class="menu-card-footer"><span class="menu-price">₹140</span><span class="menu-badge">Desi</span>
+      <button class="add-cart" data-name="Iced Masala Chai Latte" data-price="140">
+  Add to Cart
+</button>
+      </div>
+    </div>
+
+  </div>
+
+  <div style="text-align:center; margin-top:3rem;">
+    <a href="#" class="btn-gold">View full menu</a>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonial-section">
+  <p class="testi-heading">What our guests say about <em>Golden Platter</em></p>
+  <div class="testi-grid">
+    <div class="testi-card">
+      <div class="testi-stars">★★★★★</div>
+      <p class="testi-quote">"Every visit feels like a celebration. The flavours are extraordinary — Golden Platter has completely ruined every other restaurant for me."</p>
+      <div class="testi-author">— Priya M., Regular Guest</div>
+    </div>
+    <div class="testi-card">
+      <div class="testi-stars">★★★★★</div>
+      <p class="testi-quote">"The Hyderabadi Biryani here is the best I have had in the city. The dum sealing keeps every grain fragrant and perfectly cooked."</p>
+      <div class="testi-author">— Rahul K., Food Blogger</div>
+    </div>
+    <div class="testi-card">
+      <div class="testi-stars">★★★★★</div>
+      <p class="testi-quote">"We celebrated our anniversary here — the ambiance, service, and that Chocolate Fondant at the end made it absolutely perfect."</p>
+      <div class="testi-author">— Ananya S., Guest</div>
+    </div>
+  </div>
+</section>
+
+<!-- INFO -->
+<section class="info-section" id="info">
+  <div>
+    <h3 class="info-block-title">Opening Hours</h3>
+    <div class="hours-row"><span>Monday – Friday</span><span>11:00 AM – 11:00 PM</span></div>
+    <div class="hours-row"><span>Saturday</span><span>10:00 AM – 11:30 PM</span></div>
+    <div class="hours-row"><span>Sunday</span><span>10:00 AM – 10:00 PM</span></div>
+    <div class="hours-row" style="border:none"><span>Public Holidays</span><span>12:00 PM – 10:00 PM</span></div>
+  </div>
+  <div>
+  <h3 class="info-block-title">Contact Us</h3>
+
+  <form class="contact-form">
+    <input type="text" placeholder="Your Name" required><br><br>
+    <input type="email" placeholder="Your Email" required><br><br>
+    <textarea placeholder="Your Message" rows="4" required></textarea><br><br>
+    <button type="submit" class="btn-gold">Send Message</button>
+  </form>
+</div>
+  <div>
+    <h3 class="info-block-title">Find Us</h3>
+    <p class="info-address">
+      123 Main Street, Banjara Hills<br>
+      Hyderabad, Telangana 500034<br><br>
+      <a href="tel:+914012345678">+91 40 1234 5678</a><br>
+      <a href="mailto:hello@goldenplatter.com">hello@goldenplatter.com</a>
+    </p>
+  </div>
+</section>
+<div id="cart">
+  <h2>Cart</h2>
+  <ul id="cartItems"></ul>
+  <button onclick="placeOrder()">Place Order</button>
+</div>
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Golden <span>Platter</span></div>
+  <ul class="footer-nav">
+    <li><a href="#">Home</a></li>
+    <li><a href="#menu">Menu</a></li>
+    <li><a href="#info">Contact</a></li>
+  </ul>
+  <span class="footer-copy">© 2024 Golden Platter. All rights reserved.</span>
+</footer>
+
+<script>
+  const tabs = document.querySelectorAll('.tab-btn');
+  const cards = document.querySelectorAll('.menu-card');
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      const filter = tab.dataset.tab;
+      cards.forEach(card => {
+        if (filter === 'all' || card.dataset.cat === filter) {
+          card.classList.remove('hidden');
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+    });
+  });
+</script>
+<script src="script.js"></script>
+</body>
+</html>

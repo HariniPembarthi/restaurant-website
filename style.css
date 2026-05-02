@@ -1,0 +1,45 @@
+body {
+    font-family: Arial;
+    text-align: center;
+    background-color: #f2f2f2;
+}
+
+h1 {
+    color: darkred;
+}
+
+a {
+    margin: 10px;
+    text-decoration: none;
+}
+.add-cart {
+  margin-left: 10px;
+  padding: 6px 12px;
+  font-size: 0.7rem;
+  border: none;
+  background: var(--gold);
+  color: white;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  transition: 0.3s;
+}
+
+.add-cart:hover {
+  background: var(--brown);
+}
+#cart {
+  position: fixed;
+  right: -400px;
+  top: 80px;
+  width: 300px;
+  background: white;
+  padding: 15px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+  transition: 0.3s;
+  z-index: 999;
+}
+
+#cart.active {
+  right: 20px;
+}
